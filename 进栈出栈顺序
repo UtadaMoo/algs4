@@ -1,0 +1,74 @@
+
+
+public class TestOne1 {
+    public static void main(String[] args){
+        List<String> a = new ArrayList<String>(){{
+            add("0");
+            add("1");
+            add("2");
+            add("3");
+            add("4");
+            add("5");
+            add("6");
+            add("7");
+            add("8");
+            add("9");
+        }};
+        List<String> b = new ArrayList<String>(){{
+            add("4");
+            add("5");
+            add("8");
+            add("7");
+            add("5");
+            add("3");
+            add("2");
+            add("9");
+            add("0");
+            add("1");
+        }};
+        System.out.println(checkPossibility(a,b));
+      }
+
+        private static <T> boolean checkPossibility(List<T> a, List<T> b) {
+                Stack<T> resource = new Stack<>();
+                for (T t : a) {
+                    resource.push(t);
+                }
+
+                List<T> d = new ArrayList<>();
+                CollectionUtils.addAll(d, new Object[b.size()]);
+                Collections.copy(d, b);
+
+                for (int i = 0; i < b.size(); i++) {
+                    if (d.contains(b.get(i))) {
+                        Stack<T> temporary = (Stack<T>) resource.clone();
+                        while (!b.get(i).equals(temporary.peek())) {
+                            temporary.pop();
+                        }
+                        List<Integer> index = new ArrayList<>();
+                        while (!temporary.empty()) {
+                            for (int j = i; j < b.size(); j++) {
+                                if (b.get(j).equals(temporary.peek())) {
+                                    index.add(j);
+                                    d.remove(b.get(j));
+                                }
+                            }
+                            temporary.pop();
+                        }
+                        if(!isSorted(index)){
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            private static boolean isSorted(List<Integer> index){
+                for (int i=0; i<index.size()-1; i++) {
+                    if (index.get(i)>index.get(i+1)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+    }
